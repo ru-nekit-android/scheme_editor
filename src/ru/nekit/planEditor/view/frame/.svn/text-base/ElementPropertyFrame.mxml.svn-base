@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Panel
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx" 
+	xmlns:component="ru.nekit.planEditor.view.plan.component.*"
+	xmlns:planElement="ru.nekit.planEditor.model.planElement.*" 
+	xmlns:components="components.*"
+	width="150" 
+	minHeight="0"
+	>
+	
+	<s:states>
+		<s:State name="show"/>
+		<s:State name="hide"/>
+	</s:states>
+	
+	<fx:Binding source="xCord.value" 									destination="elementGroup.x" twoWay="true"/>
+	<fx:Binding source="yCord.value" 									destination="elementGroup.y" twoWay="true"/>
+	<fx:Binding source="widthValue.value"								destination="elementGroup.width" twoWay="true"/>
+	<fx:Binding source="heightValue.value" 							destination="elementGroup.height" twoWay="true"/>
+	<fx:Binding source="labelValue.text"						 			destination="labelElement.label" twoWay="true"/>
+	<fx:Binding source="!emptyBackground.selected"	 		destination="element.backgroundVisible"/>
+	<fx:Binding source="colorPicker.selectedColor"	 				destination="labelElement.color" twoWay="true"/>
+	<fx:Binding source="fillColorPicker.selectedColor"	 			destination="element.fill" twoWay="true"/>
+	<fx:Binding destination="emptyBackground.selected"	 	source="!element.backgroundVisible"/>
+	<fx:Binding destination="bold.selected"	 						source="labelElement.bold" twoWay="true"/>
+	<fx:Binding destination="italic.selected"	 						source="labelElement.italic" twoWay="true"/>
+	<fx:Binding destination="underline.selected"	 				source="labelElement.underline" twoWay="true"/>
+	
+	<fx:Script>
+		<![CDATA[
+			import ru.nekit.planEditor.model.interfaces.ILabel;
+			import ru.nekit.planEditor.model.planElement.BaseElement;
+			import ru.nekit.planEditor.model.planElement.CouplerElement;
+			import ru.nekit.planEditor.model.planElement.ElementGroup;
+			import ru.nekit.planEditor.model.planElement.interfaces.IDRSParamElement;
+			
+			import skins.TextFormatLeftBottonSkin;
+			
+			import spark.events.IndexChangeEvent;
+			
+			[Bindable]
+			public var elementGroup:ElementGroup;
+			[Bindable]
+			public var labelElement:ILabel;
+			[Bindable]
+			public var element:BaseElement;
+			[Bindable]
+			public var couplerElement:CouplerElement;
+			[Bindable]
+			public var drsParamElement:IDRSParamElement;
+			
+			private function visibleAllClickHandler(event:MouseEvent):void
+			{
+				currentState= visibleAll.selected ? "hide" : "show";
+			}
+			
+			private function couplerFrequencyChangeHandler(event:IndexChangeEvent):void
+			{
+				couplerElement.frequency = Number(couplerFrequency.selectedItem);
+			}
+			
+			private function couplerCountChangeHandler(event:IndexChangeEvent):void
+			{
+				couplerElement.count = Number(couplerCount.selectedItem);
+			}
+			
+			private function drsParamChangeHandler(event:IndexChangeEvent):void
+			{
+				drsParamElement.param = Number(drsParam.selectedItem);
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:layout>
+		<s:VerticalLayout gap="0" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" horizontalAlign="center"/>
+	</s:layout>
+	
+	<s:ToggleButton label="{visibleAll.selected ? 'Показать меню' : 'Скрыть меню'}" id="visibleAll" width="100%" height="25" click="visibleAllClickHandler(event)" selected="{currentState == 'hide'}"/>
+	
+	<s:VGroup  id="container" horizontalAlign="center" gap="0" verticalAlign="middle" paddingBottom="10" paddingLeft="0" paddingRight="0" paddingTop="0"  excludeFrom="hide">
+		<mx:Spacer height="10"/>
+		<s:Label id="headLabel" fontSize="16" fontWeight="bold"/>
+		<mx:Spacer height="-2"/>
+		<s:Form id="sizeContainer" width="100%">
+			<s:layout>
+				<s:FormLayout gap="-10" horizontalAlign="contentJustify" paddingLeft="15"/>
+			</s:layout>
+			<s:FormItem label="x:" >
+				<s:layout>
+					<s:HorizontalLayout gap="0"  paddingRight="0" paddingTop="0" paddingLeft="0" paddingBottom="0"/>
+				</s:layout>
+				<s:TextInput id="xLabel" restrict="0-9" text="{elementGroup.x}" width="40"/>
+				<s:Spinner  id="xCord" rotation="90" width="{xLabel.height}" height="30"/>
+			</s:FormItem>
+			<s:FormItem label="y:">
+				<s:layout>
+					<s:HorizontalLayout gap="0"  paddingRight="0" paddingTop="0" paddingLeft="0" paddingBottom="0"/>
+				</s:layout>
+				<s:TextInput id="yLabel" restrict="0-9" text="{elementGroup.y}"  width="40"/>
+				<s:Spinner  id="yCord" value="{Number(yLabel.text)}" width="30" rotation="180"/>
+			</s:FormItem>
+			<s:FormItem label="Ширина:" width="50">
+				<s:layout>
+					<s:HorizontalLayout gap="0"  paddingRight="0" paddingTop="0" paddingLeft="0" paddingBottom="0"/>
+				</s:layout>
+				<s:TextInput id="widthLabel" restrict="0-9" text="{elementGroup.width}"  width="40"/>
+				<s:Spinner  id="widthValue" value="{Number(widthLabel.text)}"  rotation="90" width="{widthLabel.height}" height="30"/>
+			</s:FormItem>
+			<s:FormItem label="Высота:">
+				<s:layout>
+					<s:HorizontalLayout gap="0" paddingRight="0" paddingTop="0" paddingLeft="0" paddingBottom="0"/>
+				</s:layout>
+				<s:TextInput id="heightLabel" restrict="0-9" text="{elementGroup.height}"  width="40"/>
+				<s:Spinner  id="heightValue" value="{Number(heightLabel.text)}" width="30"/>
+			</s:FormItem>
+		</s:Form>
+		<mx:Spacer height="5"/>
+		<s:VGroup id="labelContainer" gap="0" horizontalAlign="center">
+			<components:HLine width="80%"/>
+			<mx:Spacer height="5"/>
+			<s:Label text="Текст" fontSize="16"/>
+			<mx:Spacer height="4"/>
+			<s:TextArea id="labelValue" width="130" height="50"  restrict="{labelElement.restrict}"/>
+			<mx:Spacer height="-1"/>
+			<s:HGroup gap="-1" width="{labelValue.width}" horizontalAlign="center">
+				<s:ToggleButton id="ltf" skinClass="skins.TextFormatLeftBottonSkin" 		width="100%"/>
+				<s:ToggleButton id="ctf" skinClass="skins.TextFormatCenterBottonSkin" 	width="100%"/>
+				<s:ToggleButton id="rtf" skinClass="skins.TextFormatRightBottonSkin"	 	width="100%"/>
+			</s:HGroup>
+			<s:VGroup id="emptyBackgroundContainer" width="100%" gap="0" horizontalAlign="center">
+				<mx:Spacer height="4"/>
+				<s:Label text="Стиль"/>
+				<mx:Spacer height="2"/>
+				<s:HGroup gap="-1" width="{labelValue.width}" horizontalAlign="center">
+					<s:ToggleButton id="bold" 	skinClass="skins.TextFormatBoldBottonSkin" 			width="100%"/>
+					<s:ToggleButton id="italic" 	skinClass="skins.TextFormatItalicBottonSkin" 			width="100%"/>
+					<s:ToggleButton id="underline" 	skinClass="skins.TextFormatUnderlineBottonSkin"	 	width="100%"/>
+				</s:HGroup>
+				<mx:Spacer height="2"/>
+				<mx:Spacer height="9"/>
+				<components:HLine width="80%"/>
+				<mx:Spacer height="5"/>
+				<s:HGroup width="120" horizontalAlign="center" verticalAlign="middle">
+					<s:Label text="Цвет текста" fontSize="14" width="70" />
+					<mx:Spacer height="2"/>
+					<mx:ColorPicker id="colorPicker"/>
+				</s:HGroup>
+				<mx:Spacer height="5"/>
+				<s:HGroup verticalAlign="middle">
+					<s:Label text="Цвет фона" fontSize="14" width="70" />
+					<mx:Spacer height="2"/>
+					<mx:ColorPicker id="fillColorPicker"/>
+				</s:HGroup>
+				<mx:Spacer height="5"/>
+				<components:HLine width="80%"/>
+				<mx:Spacer height="5"/>
+				<s:Label text="Только надпись" fontSize="14"/>
+				<s:CheckBox id="emptyBackground" selected="false"/>
+			</s:VGroup>
+		</s:VGroup>
+		<s:VGroup  id="couplerContainer" gap="0" horizontalAlign="center" width="100%">
+			<components:HLine width="80%"/>
+			<s:VGroup id="couplerCountContainer" gap="0"  horizontalAlign="center">
+				<mx:Spacer height="5"/>
+				<s:Label text="Подключенных" fontSize="14"/>
+				<mx:Spacer height="1"/>
+				<s:ComboBox id="couplerCount" width="50" change="couplerCountChangeHandler(event)"/>
+			</s:VGroup>
+			<s:VGroup id="couplerFrequencyContainer" gap="0" horizontalAlign="center">
+				<mx:Spacer height="7"/>
+				<s:Label text="Частота" fontSize="14"/>
+				<mx:Spacer height="1"/>
+				<s:ComboBox id="couplerFrequency" width="50" change="couplerFrequencyChangeHandler(event)"/>
+			</s:VGroup>
+		</s:VGroup>
+		<s:VGroup id="drsParamContainer" gap="0" horizontalAlign="center" width="100%">
+			<components:HLine width="80%"/>
+			<s:VGroup gap="0" horizontalAlign="center">
+				<mx:Spacer height="7"/>
+				<s:Label text="Параметр" fontSize="14"/>
+				<mx:Spacer height="1"/>
+				<s:ComboBox id="drsParam" width="50" change="drsParamChangeHandler(event)"/>
+			</s:VGroup>
+		</s:VGroup>
+	</s:VGroup>
+</s:Panel>

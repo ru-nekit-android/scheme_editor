@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Panel
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	xmlns:frame="ru.nekit.planEditor.view.frame.*"
+	xmlns:components="components.*"
+	width="150"
+	minHeight="0"
+	>
+	
+	<fx:Script>
+		<![CDATA[
+			private function visibleAllClickHandler(event:MouseEvent):void
+			{
+				currentState= visibleAll.selected ? "hide" : "show";
+			}
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="show"/>
+		<s:State name="hide"/>
+	</s:states>
+	
+	<s:layout>
+		<s:VerticalLayout gap="0" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"/>
+	</s:layout>
+	
+	<s:ToggleButton label="{visibleAll.selected ? 'Показать меню' : 'Скрыть меню'}" id="visibleAll" width="100%" height="25" click="visibleAllClickHandler(event)" selected="{ currentState == 'hide'}"/>
+	<s:VGroup width="100%"  gap="0" paddingBottom="15" paddingLeft="10" paddingRight="10" paddingTop="10" horizontalAlign="center" excludeFrom="hide">
+		<frame:ElementToolFrame	id="elementTool"/>
+		<components:HLine width="80%" visible="{elementTool.visible}" includeInLayout="{elementTool.includeInLayout}"/>
+		<frame:LayersToolFrame 	id="layersTool"/>
+	</s:VGroup>
+</s:Panel>

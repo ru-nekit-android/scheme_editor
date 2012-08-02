@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application 
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx" 
+	xmlns:view="ru.nekit.planEditor.view.*" 
+	xmlns:frame="ru.nekit.planEditor.view.frame.*" 
+	xmlns:components="components.*"
+	backgroundColor="0xffffff"
+	width="100%"
+	height="100%" 
+	>
+	
+	<fx:Style>
+		@namespace s "library://ns.adobe.com/flex/spark";
+		@namespace mx "library://ns.adobe.com/flex/mx";
+		@namespace view "ru.nekit.planEditor.view.*";
+		@namespace component "ru.nekit.planEditor.view.plan.component.*";
+		
+		@font-face {
+			src: url("fonts/Calibri.ttf");
+			fontFamily: Calibri;
+			advancedAntiAliasing: true;
+		}
+		
+		@font-face {
+			src: url("fonts/Calibri Bold.ttf");
+			fontFamily: Calibri;
+			fontWeight:bold;
+			advancedAntiAliasing: true;
+		}
+		
+		@font-face {
+			src: url("fonts/Calibri.ttf");
+			fontFamily: fontCalibri;
+			advancedAntiAliasing: true;
+			embed-as-cff: false;
+		}
+		
+		mx|ColorPicker {
+			swatchPanelStyleName:customSwatchPanelStyleName;
+		}
+		
+		.customSwatchPanelStyleName {
+			previewWidth: 100;
+		}
+		
+		s|global {
+			font-family:Calibri;
+			fontSize: 13;
+		}   
+		
+		s|TitleWindow{
+			skin-class: ClassReference("skins.TitleWindowSkin");	
+		}
+		
+		mx|ToolTip{
+			font-family: Calibri;
+			textFieldClass: ClassReference("mx.core.UIFTETextField");
+			font-size: 12;
+		}
+		
+		s|Panel{
+			skin-class: ClassReference("skins.PanelSkin");
+			background-color: #d6d6d6;
+		}
+		
+		s|Form{
+			skin-class:  ClassReference("skins.FormSkin");
+		}
+		
+		s|ToggleButton{
+			skin-class: ClassReference("skins.ToggleButtonSkin"); 
+		}
+		
+		s|Button{
+			corner-radius: 0; 
+		}
+		
+	</fx:Style>
+	
+	<fx:Script>
+		<![CDATA[
+			import ru.nekit.planEditor.PlanEditor;
+			
+			import skins.FullscreenButtonSkin;
+			
+			public static const editor:PlanEditor = PlanEditor.instance;
+			
+		]]>
+	</fx:Script>
+	
+	<s:creationComplete>
+		<![CDATA[
+		
+		editor.startup(this);
+		
+		]]>
+	</s:creationComplete>
+	
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	
+	<s:PopUpAnchor id="wellcome" width="100%" height="100%" displayPopUp="false" verticalCenter="0" horizontalCenter="0"  popUpPosition="center">
+		<s:popUp>
+			<s:Group>
+				<s:Rect radiusX="15" radiusY="15" left="-20" right="-20" top="-15" bottom="-20">
+					<s:fill>
+						<s:SolidColor color="0xffffff" alpha="1"/>
+					</s:fill>
+				</s:Rect>
+				<s:VGroup width="240">
+					<s:Label text="Открыть план:" fontSize="20"/>
+					<components:HLine width="100%"/>
+					<s:ToggleButton id="editAction" label="Редактирование" fontSize="24" width="100%" height="30"/>
+					<mx:Spacer height="5"/>
+					<s:ToggleButton id="editCouplerAction" label="Подключение к ответвителям" fontSize="24" width="100%" height="30"/>
+					<mx:Spacer height="5"/>
+					<s:ToggleButton id="showAction" label="Просмотр" fontSize="24" width="100%" height="30"/>
+				</s:VGroup>
+			</s:Group>
+		</s:popUp>
+		
+	</s:PopUpAnchor>
+	
+	<s:VGroup id="main" gap="0" width="100%" height="100%" enabled="false">
+		
+		<s:Group  width="100%">
+			<s:Group height="25" width="100%">
+				<mx:MenuBar id="menuBar" width="100%" height="100%" labelField="@label"/>
+				<s:ToggleButton id="fullscreen" width="30" height="100%" right="-1" skinClass="skins.FullscreenButtonSkin"/>
+				<s:HGroup right="154" verticalAlign="middle">
+					<s:Label text="Масштаб:"/>
+					<s:ComboBox id="scaleChoice" width="60" height="25"/>
+				</s:HGroup>
+			</s:Group>
+			<s:Group  id="addressContainer"  horizontalCenter="0" verticalCenter="0" visible="false"  height="23">
+				<s:Rect height="23" right="-5" left="-5">
+					<s:fill>
+						<s:LinearGradient rotation="90">
+							<s:GradientEntry
+								color="0x333333"
+								/>
+							<s:GradientEntry 
+								color="0xaaaaaa"
+								/>
+						</s:LinearGradient>
+					</s:fill>
+				</s:Rect>
+				<s:HGroup fontSize="16" verticalCenter="0" color="0xffffff">
+					<s:Label id="address"/>
+				</s:HGroup>
+			</s:Group>
+		</s:Group>
+		
+		<s:HGroup width="100%" height="100%" gap="0">
+			<s:Group>
+				<frame:ToolFrame id="tool" depth="2"  left="2" top="2"/>
+			</s:Group>
+			<s:VGroup width="100%" height="100%" paddingTop="2" paddingRight="2" paddingLeft="2" paddingBottom="2">
+				<s:Panel width="100%" height="100%">	
+					<s:VGroup width="100%" height="100%" paddingTop="2" paddingRight="2" paddingLeft="2" paddingBottom="4">
+						<frame:PlanFrame id="plan" width="100%" height="100%"/>
+					</s:VGroup>
+				</s:Panel>
+			</s:VGroup>
+			<s:Group>
+				<frame:ElementPropertyFrame id="elementProperty"  depth="3" right="2" top="2"/>
+			</s:Group>
+		</s:HGroup>
+		
+	</s:VGroup>
+	
+</s:Application>

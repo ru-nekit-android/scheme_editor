@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/scheme_editor/!svn/ver/6/trunk/src/ru/nekit/planEditor/model/planElement
+END
+FlatElement.as
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/scheme_editor/!svn/ver/12/trunk/src/ru/nekit/planEditor/model/planElement/FlatElement.as
+END
+StairwellElement.as
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/scheme_editor/!svn/ver/12/trunk/src/ru/nekit/planEditor/model/planElement/StairwellElement.as
+END
+CouplerElement.as
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/scheme_editor/!svn/ver/12/trunk/src/ru/nekit/planEditor/model/planElement/CouplerElement.as
+END
+BaseElement.as
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/scheme_editor/!svn/ver/12/trunk/src/ru/nekit/planEditor/model/planElement/BaseElement.as
+END
+ElementGroup.as
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/scheme_editor/!svn/ver/12/trunk/src/ru/nekit/planEditor/model/planElement/ElementGroup.as
+END
+LabelElement.as
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/scheme_editor/!svn/ver/12/trunk/src/ru/nekit/planEditor/model/planElement/LabelElement.as
+END

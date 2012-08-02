@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration version="0.13" xmlns:style="http://plan-editor/style/">
+  <gateway value="http://baza.inetvl.ru/territory/scheme_editor/gateway"/>
+    <LayersDefinitionList default="build-layer">
+        <LayersDefinition name="Все слои" id="all-layer"   description="Все слои"      depth="0"  enabled="true" visible="true"/>
+        <LayersDefinition name="Строения" id="build-layer" description="Схема дома, базовый слой" depth="1" enabled="true" visible="true"/>
+        <LayersDefinition name="КТВ"      id="ctv-layer"   description="Слой для редактируемых ответвителей" depth="2" enabled="true" visible="true"/>
+        <LayersDefinition name="Надписи"  id="node-layer"  description="Слой для размещения различного рода надписей" depth="3" enabled="true" visible="true"/>
+    </LayersDefinitionList> 
+      <ElementsDefinitionList>
+        <ElementDefinition name="Квартира"    type="flat"      description="Квартира" class="FlatElement"      resolveIn="build-layer"            mainLayer="build-layer" style:fill="0xFFFFFF" style:stroke="0x000000" style:font-size="11" font-family="Tahoma"/>
+        <ElementDefinition name="Пролёт"      type="stairwell" description="Пролёт"   class="StairwellElement" resolveIn="build-layer"            mainLayer="build-layer" style:fill="0xCCCCCC" style:stroke="0x000000"/>
+        <ElementDefinition name="Надпись"     type="label"     description="Описание" class="LabelElement"     resolveIn="node-layer,build-layer" mainLayer="node-layer"  style:fill="0xFFFFCC" style:stroke="0x000000" style:font-size="12" font-family="Tahoma"/>
+        <ElementDefinition name="Ответвитель" type="coupler"   description="КТВ"      class="CouplerElement"   resolveIn="ctv-layer"              mainLayer="ctv-layer"   style:fill="0x66FFFF" style:stroke="0x0099CC" style:font-size="11" font-family="Tahoma"/>
+    </ElementsDefinitionList> 
+</configuration>

@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/scheme_editor/!svn/ver/6/trunk/src/ru/nekit/planEditor/view/frame
+END
+PlanFrame.mxml
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/scheme_editor/!svn/ver/12/trunk/src/ru/nekit/planEditor/view/frame/PlanFrame.mxml
+END
+LayersToolFrame.mxml
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/scheme_editor/!svn/ver/12/trunk/src/ru/nekit/planEditor/view/frame/LayersToolFrame.mxml
+END
+ToolFrame.mxml
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/scheme_editor/!svn/ver/6/trunk/src/ru/nekit/planEditor/view/frame/ToolFrame.mxml
+END
+ElementPropertyFrame.mxml
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/scheme_editor/!svn/ver/12/trunk/src/ru/nekit/planEditor/view/frame/ElementPropertyFrame.mxml
+END
+PopUpFrame.mxml
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/scheme_editor/!svn/ver/8/trunk/src/ru/nekit/planEditor/view/frame/PopUpFrame.mxml
+END
+ElementToolFrame.mxml
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/scheme_editor/!svn/ver/12/trunk/src/ru/nekit/planEditor/view/frame/ElementToolFrame.mxml
+END

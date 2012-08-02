@@ -1,0 +1,101 @@
+10
+
+dir
+6
+http://gnelch@poleved.ru/svn/scheme_editor/trunk/src/ru/nekit/planEditor/model
+http://gnelch@poleved.ru/svn/scheme_editor
+
+
+
+2011-07-26T12:44:45.672869Z
+6
+gnelch
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+bf8bc499-5fda-4da4-aa4f-6dd97cf67220
+
+clipboard
+dir
+
+interfaces
+dir
+
+
+
+add
+
+planElement
+dir
+
+vo
+dir
+
+PlanEditMode.as
+file
+0
+
+
+add
+
+
+
+
+
+has-props
+has-prop-mods
+
+definition
+dir
+
+dataModel
+dir
+
+ModelCore.as
+file
+8
+
+
+
+2011-08-16T09:16:24.000000Z
+534fda0b01927acaf3841f9b6f484fee
+2011-08-20T14:09:40.713617Z
+8
+gnelch
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+822
+
+action
+dir
+

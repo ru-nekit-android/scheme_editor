@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	>
+	
+	<s:layout>
+		<s:VerticalLayout gap="0" paddingLeft="0" paddingRight="0" paddingBottom="5" paddingTop="5" horizontalAlign="center"/>
+	</s:layout>
+	
+	<s:Label text="Слои" fontWeight="bold" fontSize="16"/>
+	
+	<mx:Spacer height="5"/>
+	
+	<s:List id="menu" width="110" contentBackgroundAlpha="0" borderVisible="false">
+		<s:layout>
+			<s:VerticalLayout paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" variableRowHeight="false" gap="3"/>
+		</s:layout>
+		<s:itemRenderer>
+			<fx:Component>
+				<s:ItemRenderer width="100%" >
+					
+					<fx:Script>
+						<![CDATA[
+							import mx.controls.Alert;
+							
+							import ru.nekit.planEditor.PlanEditor;
+							import ru.nekit.planEditor.model.definition.layer.LayerDefinition;
+							
+							import spark.skins.spark.ToggleButtonSkin;
+							
+							private var layer:LayerDefinition;
+							
+							override public function set data(value:Object):void
+							{
+								if( value && data != value )
+								{
+									super.data 			= value;
+									layer            			= value as LayerDefinition;
+									visibleButton.visible	= layer.id != LayerDefinition.ALL;
+									container.toolTip 	= layer.description
+								}
+							}
+							
+							private function visibleClickHandler(event:MouseEvent):void
+							{
+								PlanEditor.instance.model.layerDefinitionLink.getLayerMediator(layer).owner.visible = !visibleButton.selected;
+							}
+							
+						]]>
+					</fx:Script>
+					
+					<s:Rect left="0" right="0" bottom="0" top="0" radiusX="0" radiusY="0" >
+						<s:stroke>
+							<s:SolidColorStroke color="0" weight="1"/>
+						</s:stroke>
+						<s:fill>
+							<s:LinearGradient rotation="90">
+								<s:GradientEntry color="0xffffff" alpha=".5"/>
+								<s:GradientEntry color="0x999999" alpha=".5" />
+							</s:LinearGradient>
+						</s:fill>
+					</s:Rect>
+					<s:HGroup  id="container" width="100%" height="100%" verticalAlign="middle" gap="0">
+						<s:VGroup paddingBottom="5" paddingLeft="5" paddingTop="5" paddingRight="5" width="100%" height="100%">
+							<s:Label text="{data.name}" fontSize="15"/>
+						</s:VGroup>	
+						<mx:Spacer width="5"/>
+						<s:ToggleButton width="30" height="20" toolTip="{visibleButton.selected ? 'Показать слой' : 'Скрыть слой'}" skinClass="skins.VisibleButtonSkin" click="visibleClickHandler(event)" id="visibleButton"/>
+						<mx:Spacer width="2"/>
+					</s:HGroup>
+				</s:ItemRenderer>
+			</fx:Component>
+		</s:itemRenderer>
+	</s:List>
+</s:Group>

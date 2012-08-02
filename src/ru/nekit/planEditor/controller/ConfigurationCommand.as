@@ -1,0 +1,129 @@
+package ru.nekit.planEditor.controller
+{
+	
+	import flash.events.Event;
+	import flash.net.URLLoader;
+	import flash.net.URLRequest;
+	
+	import mx.controls.Alert;
+	import mx.core.FlexGlobals;
+	
+	import org.puremvc.as3.multicore.interfaces.ICommand;
+	import org.puremvc.as3.multicore.interfaces.INotification;
+	import org.puremvc.as3.multicore.patterns.command.SimpleCommand;
+	
+	import ru.nekit.planEditor.NAMES;
+	import ru.nekit.planEditor.model.PlanEditMode;
+	import ru.nekit.planEditor.model.dataModel.PageDataItemList;
+	import ru.nekit.planEditor.model.definition.ConfigDefinition;
+	import ru.nekit.planEditor.model.definition.layer.LayerDefinition;
+	import ru.nekit.planEditor.model.planElement.AttenuatorElement;
+	import ru.nekit.planEditor.model.planElement.SplitterElement;
+	import ru.nekit.planEditor.serviceCore.serviceCommand.EditorSC;
+	import ru.nekit.planEditor.serviceCore.serviceUtil.AMFServiceUtil;
+	import ru.nekit.planEditor.serviceCore.serviceUtil.description.AMFSD;
+	import ru.nekit.planEditor.serviceCore.serviceUtil.properties.ServiceProcessBehavior;
+	import ru.nekit.planEditor.serviceCore.serviceUtil.result.ServiceUtilResult;
+	
+	import spark.components.Application;
+	
+	public class ConfigurationCommand extends SimpleCommand implements ICommand
+	{
+		
+		private static var loader:URLLoader;
+		
+		override public function execute( notification:INotification ) : void
+		{
+			loader						 	= new URLLoader();
+			var configPath:String = Application(FlexGlobals.topLevelApplication).parameters.configPath;
+			var rootUrl:String 		= Application(FlexGlobals.topLevelApplication).url;
+			rootUrl							= rootUrl.substring(0, rootUrl.lastIndexOf("/") + 1);
+			loader.addEventListener(Event.COMPLETE, loadCompleteHandler);
+			loader.load(new URLRequest( configPath ? configPath : (rootUrl + "configuration.xml") ));
+		}
+		
+		private function loadCompleteHandler(event:Event):void
+		{
+			AttenuatorElement;
+			SplitterElement;
+			var configuration:XML 					= new XML(URLLoader(event.target).data);
+			editor.model.configDefinition      	= new ConfigDefinition(configuration);
+			editor.model.layersDefinition 			= editor.model.configDefinition.layersDefinition;
+			editor.model.elementsDefinition 		= editor.model.configDefinition.elementsDefinition;
+			editor.model.pagesData 					= new PageDataItemList;
+			var length:uint 								= editor.model.layersDefinition.length;
+			
+			AMFSD.registerSession(new  AMFServiceUtil((configuration.gateway.@value).toString()));
+			
+			EditorSC.authLevel.execute(ServiceProcessBehavior.withFunctions(
+				//success
+				function(result:ServiceUtilResult):void
+				{
+					const authLevel:uint 				= editor.model.authLevel = result.result as uint;
+					var layerD:LayerDefinition;
+					PlanEditMode.mode 				= PlanEditMode.READ_ONLY_MODE;
+					var k:uint = 0;
+					for( var i:uint = 0; i < length; i++)
+					{
+						layerD = editor.model.layersDefinition.get(i);
+						if( layerD.id != LayerDefinition.ALL )
+						{
+							layerD.readBit 	= Math.pow(2, k++);
+							layerD.editBit 		= Math.pow(2, k++);
+							if( layerD.id.indexOf("ctv") != -1 )
+								layerD.extraBit	= Math.pow(2, k++);
+						}
+						if( layerD.active )
+						{
+							if( authLevel > 0 && layerD.id != LayerDefinition.ALL )
+							{
+								layerD.editable 			= layerD.editBit & authLevel;
+								if( ( layerD.active		= ( layerD.extraBit & authLevel ) != 0) )
+									if( layerD.id.indexOf("ctv") != -1 )
+									{
+										PlanEditMode.mode	= PlanEditMode.EDIT_COUPLET_MODE;
+										layerD.editable = true;
+									}
+									else
+										if( PlanEditMode.mode	== PlanEditMode.READ_ONLY_MODE )
+											PlanEditMode.mode	= PlanEditMode.EDIT_MODE;
+								if( layerD.editable )
+									if( PlanEditMode.mode	== PlanEditMode.READ_ONLY_MODE )
+										PlanEditMode.mode	= PlanEditMode.EDIT_MODE;
+								layerD.active				||= ( layerD.readBit & authLevel ) != 0;
+								layerD.active				||= layerD.editable;
+							}
+							editor.sendNotification(NAMES.REGISTER_LAYER, layerD);
+						}
+					}
+					length 										=  editor.model.elementsDefinition.length;
+					for( i = 0; i < length; i++)
+						editor.sendNotification(NAMES.REGISTER_ELEMENT, editor.model.elementsDefinition.get(i));
+					layerD =  editor.model.layersDefinition.getByID(editor.model.configDefinition.defaultLayer);
+					if( layerD && layerD.active )
+						sendNotification(NAMES.SELECT_LAYER, layerD);
+					else
+						for( i = 0; i < length; i++)
+						{
+							layerD = editor.model.layersDefinition.get(i);
+							if( layerD && layerD.active && layerD.id != LayerDefinition.ALL )
+							{
+								sendNotification(NAMES.SELECT_LAYER, layerD);
+								break;
+							}
+						}
+					sendNotification(NAMES.DATA_COMMAND, null, NAMES.DATA_READ_STREETS);
+					sendNotification(NAMES.STARTUP_COMPLETE);
+				}
+				,
+				//failure
+				function(result:ServiceUtilResult):void
+				{
+					Alert.show("Не могу получить уровень доступа", "Ошибка");	
+					editor.view.owner.visible = false;
+				}
+			)
+			);
+		}
+	}
+}

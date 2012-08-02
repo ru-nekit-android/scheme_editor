@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/scheme_editor/!svn/ver/6/trunk/src/ru/nekit/planEditor/model/dataModel
+END
+AddressDataModel.as
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/scheme_editor/!svn/ver/6/trunk/src/ru/nekit/planEditor/model/dataModel/AddressDataModel.as
+END
+StreetList.as
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/scheme_editor/!svn/ver/6/trunk/src/ru/nekit/planEditor/model/dataModel/StreetList.as
+END
+PlanDataModel.as
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/scheme_editor/!svn/ver/6/trunk/src/ru/nekit/planEditor/model/dataModel/PlanDataModel.as
+END
+BuildingList.as
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/scheme_editor/!svn/ver/8/trunk/src/ru/nekit/planEditor/model/dataModel/BuildingList.as
+END

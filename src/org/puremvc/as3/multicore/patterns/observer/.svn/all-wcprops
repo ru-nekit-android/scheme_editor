@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/scheme_editor/!svn/ver/10/trunk/src/org/puremvc/as3/multicore/patterns/observer
+END
+Notifier.as
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/scheme_editor/!svn/ver/10/trunk/src/org/puremvc/as3/multicore/patterns/observer/Notifier.as
+END
+Notification.as
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/scheme_editor/!svn/ver/10/trunk/src/org/puremvc/as3/multicore/patterns/observer/Notification.as
+END
+Observer.as
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/scheme_editor/!svn/ver/10/trunk/src/org/puremvc/as3/multicore/patterns/observer/Observer.as
+END

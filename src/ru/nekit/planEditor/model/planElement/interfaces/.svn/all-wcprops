@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/scheme_editor/!svn/ver/6/trunk/src/ru/nekit/planEditor/model/planElement/interfaces
+END
+ISerialize.as
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/scheme_editor/!svn/ver/6/trunk/src/ru/nekit/planEditor/model/planElement/interfaces/ISerialize.as
+END
+ILabel.as
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/scheme_editor/!svn/ver/8/trunk/src/ru/nekit/planEditor/model/planElement/interfaces/ILabel.as
+END
+IDeserialize.as
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/scheme_editor/!svn/ver/6/trunk/src/ru/nekit/planEditor/model/planElement/interfaces/IDeserialize.as
+END
+IDimensional.as
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/scheme_editor/!svn/ver/6/trunk/src/ru/nekit/planEditor/model/planElement/interfaces/IDimensional.as
+END
+ISelectable.as
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/scheme_editor/!svn/ver/6/trunk/src/ru/nekit/planEditor/model/planElement/interfaces/ISelectable.as
+END

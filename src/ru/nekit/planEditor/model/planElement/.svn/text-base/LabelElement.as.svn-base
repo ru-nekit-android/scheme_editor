@@ -1,0 +1,438 @@
+package ru.nekit.planEditor.model.planElement
+{
+	
+	import flash.display.CapsStyle;
+	import flash.display.JointStyle;
+	import flash.display.LineScaleMode;
+	import flash.events.Event;
+	import flash.events.KeyboardEvent;
+	import flash.events.MouseEvent;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFieldType;
+	import flash.text.TextFormat;
+	import flash.text.TextFormatAlign;
+	
+	import mx.utils.StringUtil;
+	
+	import ru.nekit.planEditor.PlanEditor;
+	import ru.nekit.planEditor.model.definition.element.ElementDefinition;
+	import ru.nekit.planEditor.model.interfaces.ILabel;
+	import ru.nekit.planEditor.util.Util;
+	
+	public class LabelElement extends StairwellElement implements ILabel
+	{
+		
+		protected var _label:TextField;
+		protected var _labelTextFormat:TextFormat;
+		
+		protected var _colorDefault:uint;
+		protected var _color:uint;
+		
+		protected var _fontSizeDefault:uint;
+		protected var _fontSize:uint;
+		
+		protected var _textAlignDefault:String;
+		protected var _textAlign:String;
+		
+		protected var _underlineDefault:Boolean;
+		protected var _underline:Boolean;
+		
+		protected var _boldDefault:Boolean;
+		protected var _bold:Boolean;
+		
+		protected var _italicDefault:Boolean;
+		protected var _italic:Boolean;
+		
+		public function LabelElement()
+		{
+			super();
+			toolTip 									= "Двойное нажатие мыши для редактирования текста";
+			explicitWidth 						= 100;
+			explicitHeight 						= 20;
+			_label 									= new TextField;
+			_fill										= _fillDefault 				= 0xfff5b2;
+			_stroke								= _strokeDefault 		= 0x333333;
+			_fontSize								= _fontSizeDefault		= 13;
+			_color									= _colorDefault			= 0xff8800;
+			_textAlign							= _textAlignDefault 	= TextFormatAlign.CENTER;
+			_underline							= _underlineDefault	= false;
+			_bold									= _boldDefault			= false;
+			_italic									= _italicDefault			= false;
+			_labelTextFormat				= new TextFormat("Tahoma", _fontSize, _color, _bold, _italic, _underline, null, null, _textAlign );
+			_label.multiline                  	= true;
+			doubleClickEnabled 				= true;
+		}
+		
+		public function set fontSize(value:uint):void
+		{
+			if( _fontSize != value )
+			{
+				_labelTextFormat.size		= _fontSize 						= value;
+				updateTextFormat();
+				dispatchEvent(new Event("fontSizeChanged"));
+			}
+		}
+		
+		[Bindable(fontSizeChanged)]
+		public function get fontSize():uint
+		{
+			return _fontSize;
+		}
+		
+		public function set color(value:uint):void
+		{
+			if( _color != value )
+			{
+				_labelTextFormat.color	= _color 								= value;
+				updateTextFormat();
+				dispatchEvent(new Event("colorChanged"));
+			}
+		}
+		
+		[Bindable(colorChanged)]
+		public function get color():uint
+		{
+			return _color;
+		}
+		
+		public function get labelTextFormat():TextFormat
+		{
+			return  _labelTextFormat;
+		}
+		
+		public function set textAlign(value:String):void
+		{
+			value ||= TextFormatAlign.CENTER;
+			if( _textAlign != value )
+			{
+				_labelTextFormat.align = _textAlign 						= value ;
+				updateTextFormat();
+				dispatchEvent(new Event("textAlignChanged"));
+			}
+		}
+		
+		[Bindable(textAlignChanged)]
+		public function get textAlign():String
+		{
+			return _textAlign;
+		}
+		
+		public function set underline(value:Boolean):void
+		{
+			if( _underline != value )
+			{
+				_labelTextFormat.underline =_underline 				= value;
+				updateTextFormat();
+				dispatchEvent(new Event("underlineChanged"));
+			}
+		}
+		
+		[Bindable(underlineChanged)]
+		public function get underline():Boolean
+		{
+			return _underline;
+		}
+		
+		public function set bold(value:Boolean):void
+		{
+			if( _bold != value )
+			{
+				_labelTextFormat.bold =_bold 								= value;
+				updateTextFormat();
+				dispatchEvent(new Event("boldChanged"));
+			}
+		}
+		
+		[Bindable(boldChanged)]
+		public function get bold():Boolean
+		{
+			return _bold;
+		}
+		
+		public function set italic(value:Boolean):void
+		{
+			if( _italic != value )
+			{
+				_labelTextFormat.italic =_italic 				= value;
+				updateTextFormat();
+				dispatchEvent(new Event("italicChanged"));
+			}
+		}
+		
+		[Bindable(italicChanged)]
+		public function get italic():Boolean
+		{
+			return _italic;
+		}
+		
+		protected function updateTextFormat():void
+		{
+			_label.defaultTextFormat = _labelTextFormat;
+			if( label.length >= 0 )
+				_label.setTextFormat(_labelTextFormat, -1,  -1);
+			else
+				_label.setTextFormat(_labelTextFormat, 0, _label.text.length - 1);	
+			updateLabelPosition();
+		}
+		
+		[Bindable(event="labelChanged")]
+		protected function updateLabelPosition():void
+		{
+			switch( labelTextFormat.align )
+			{
+				case TextFormatAlign.CENTER:
+					
+					_label.x = (width  -  _label.width)/2;
+					
+					break;
+				
+				case TextFormatAlign.LEFT:
+					
+					_label.x = 0;
+					
+					break;
+				
+				case TextFormatAlign.RIGHT:
+					
+					_label.x = width  -  _label.width;
+					
+					break;
+				
+				default:
+					break;
+			}
+			_label.y = (height - _label.height)/2;
+		}
+		
+		override public function setFocus():void
+		{
+			super.setFocus();
+			drawLabel(true);
+		}
+		
+		override public function set width(value:Number):void
+		{
+			if( width != value )
+			{
+				super.width = value;
+				updateLabelPosition();
+			}
+		}
+		
+		override public function set height(value:Number):void
+		{
+			if( height != value )
+			{
+				super.height = value;
+				updateLabelPosition();
+			}
+		}
+		
+		override protected function draw():void
+		{
+			graphics.clear();
+			graphics.lineStyle(1, _stroke, _backgroundVisible ? 1 : .1, false, LineScaleMode.VERTICAL, CapsStyle.NONE, JointStyle.MITER, 10);
+			graphics.beginFill(_fill, _backgroundVisible ? 1 : .1);
+			graphics.drawRoundRect(0, 0, width, height, 0);
+			graphics.endFill();	
+		}
+		
+		override public function serialize(value:XML):XML
+		{
+			value = super.serialize(value);
+			if( label && StringUtil.trim(label) != "" )
+				value.text()[0] 					= label;
+			if( _labelTextFormat.align != TextFormatAlign.CENTER )
+				value.@[ElementDefinition.TEXT_ALIGN] 	=  _labelTextFormat.align;
+			if( _color != _colorDefault )
+				value.@[ElementDefinition.COLOR] 			= Util.correctInColor( _color.toString(16) );
+			if( _fontSize != _fontSizeDefault )
+				value.@[ElementDefinition.FONT_SIZE] 	= _fontSize;
+			return value;
+		}
+		
+		override public function deserialize(value:XML):void
+		{
+			super.deserialize(value);
+			label 		= value.text()[0];
+			textAlign	= value.attribute(ElementDefinition.TEXT_ALIGN);
+			var _color:String =  value.attribute(ElementDefinition.COLOR );
+			if( _color == "" || !_color )
+				color 			=  _colorDefault;
+			else
+				color 			= Util.correctOutColor( _color );
+			fontSize	= int( value.attribute(ElementDefinition.FONT_SIZE ) )		 || _fontSizeDefault;
+		}
+		
+		protected function drawLabel(selectedMode:Boolean = false):void
+		{
+			_label.border 						= selectedMode;
+			_label.background 				= selectedMode;
+			_label.backgroundColor 		= selectedMode ? 0xffffff : 0;
+			_label.borderColor 				= selectedMode ? 0x000000 : 0;
+			_label.type							= selectedMode ? TextFieldType.INPUT : TextFieldType.DYNAMIC ;
+			mouseChildren 					= selectedMode;
+			if( selectedMode )
+			{
+				_label.addEventListener(MouseEvent.MOUSE_DOWN, stopEventHandler);
+				_label.addEventListener(MouseEvent.MOUSE_UP,		stopEventHandler);
+				_label.addEventListener(KeyboardEvent.KEY_DOWN,	stopEventHandler);
+				_label.addEventListener(KeyboardEvent.KEY_UP,			stopEventHandler);
+				if( !_label.hasEventListener(Event.CHANGE) )
+					_label.addEventListener(Event.CHANGE,         				changeHandlerEvent);
+				stage.focus 						= _label;
+				_label.focusRect 					= true;
+				_label.setSelection(0, _label.text.length);
+			}
+			else
+			{
+				_label.autoSize                    = TextFieldAutoSize.LEFT;
+				_label.removeEventListener(MouseEvent.MOUSE_DOWN, 	stopEventHandler);
+				_label.removeEventListener(MouseEvent.MOUSE_UP,			stopEventHandler);
+				_label.removeEventListener(KeyboardEvent.KEY_DOWN,	stopEventHandler);
+				_label.removeEventListener(KeyboardEvent.KEY_UP,			stopEventHandler);
+				_label.setSelection(-1, -1);
+			}
+			if( label == "" )
+			{
+				label = " ";
+				updateLabelSize();
+				updateLabelPosition();
+				label = "";
+			}
+			else
+			{
+				updateLabelSize();
+				updateLabelPosition();
+			}
+		}
+		
+		protected function changeHandlerEvent(event:Event):void
+		{
+			updateLabelSize();
+			updateLabelPosition();
+			dispatchEvent(new Event("labelChanged"));
+		}
+		
+		public function set label(value:String):void
+		{
+			if( _label.text != value )
+			{
+				_label.text = value || "";
+				updateLabelSize();
+				updateLabelPosition();
+				dispatchEvent(new Event("labelChanged"));
+			}
+		}
+		
+		public function get restrict():String
+		{
+			return null;
+		}
+		
+		protected function updateLabelSize():void{
+			var textWidth:Number	= Util.roundTo(_label.textWidth  +  PlanEditor.instance.view.plan.cellSizeX / 2, PlanEditor.instance.view.plan.cellSizeX);
+			var textHeight:Number 	= Util.roundTo(_label.textHeight +  PlanEditor.instance.view.plan.cellSizeY / 2, PlanEditor.instance.view.plan.cellSizeY);
+			width								= Math.max(width,  textWidth);
+			height			 					= Math.max(height,  textHeight);
+			minHeight 						= Math.max(constMinHeight, textHeight);
+			minWidth  						= Math.max(constMinWidth, textWidth);
+			if( selectionGroup )
+				selectionGroup.updateDimension();
+		}
+		
+		public function get label():String
+		{
+			return _label.text ? _label.text : "";
+		}
+		
+		override public function copy():BaseElement
+		{
+			var result:LabelElement 			= new LabelElement;
+			result.explicitHeight 				= explicitHeight;
+			result.explicitWidth 					= explicitWidth;
+			result.x           							= x;
+			result.y           							= y;
+			result.layer     							= layer;
+			result._label.text		    			= label;
+			result._stroke							= _stroke;
+			result._fill									= _fill;
+			result._fillDefault						= _fillDefault;
+			result._strokeDefault 				= _strokeDefault;
+			
+			result.textAlign						= _textAlign;
+			result.fontSize							= _fontSize;
+			result.color								= _color;
+			result.bold								= _bold;
+			result.underline						= _underline;
+			result.italic								= _italic;
+			result._fontSizeDefault			= _fontSizeDefault;
+			result._colorDefault					= _colorDefault;
+			result._boldDefault					= _boldDefault;
+			result._italicDefault					= _italicDefault;
+			result._underlineDefault			= _underlineDefault;
+			return result;
+		}
+		
+		override public function registerOnLayer():void
+		{
+			if( !_registered )
+			{
+				addEventListener(MouseEvent.DOUBLE_CLICK, 			doubleClickHandler);
+				draw();
+				drawLabel();
+				addChild(_label);
+				_registered = true;
+			}
+		}
+		
+		override public function unregisterOnLayer():void
+		{
+			if(_registered )
+			{
+				removeEventListener(MouseEvent.DOUBLE_CLICK, 			doubleClickHandler);
+				_label.removeEventListener(Event.CHANGE,         				changeHandlerEvent);
+				_registered = false;
+			}
+		}
+		
+		private function doubleClickHandler(event:MouseEvent):void
+		{
+			if( layer.enabled )
+				drawLabel(true);
+		}
+		
+		private function stopEventHandler(event:Event):void
+		{
+			event.preventDefault();
+			event.stopPropagation();
+		}
+		
+		override public function set selected(value:Boolean):void
+		{
+			if( selected != value )
+			{
+				super.selected = value;
+				if( !selected ){
+					drawLabel(selected);
+				}
+			}
+		}
+		
+		override public function configByDefinition(definition:ElementDefinition):void
+		{
+			super.configByDefinition(definition);
+			if( definition.fontColor != -1 )
+				color 				= _colorDefault 			= definition.fontColor;
+			if( definition.fontSize != -1 )
+				fontSize 			= _fontSizeDefault		= definition.fontSize;
+			if( definition.underline )
+				underline 			= _underlineDefault 	= definition.underline;
+			if( definition.bold )
+				bold 					= _boldDefault 			= definition.bold;
+			if( definition.italic)
+				italic 				= _italicDefault 			= definition.italic;
+		}
+	}
+}

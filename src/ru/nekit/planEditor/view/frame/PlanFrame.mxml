@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:VGroup  
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx" 
+	xmlns:component="ru.nekit.planEditor.view.plan.component.*"
+	gap="0"
+	>
+	
+	<s:Group id="pageListContainer" width="100%" height="20" visible="{ pageList.dataProvider != null &amp;&amp; pageList.dataProvider.length &gt; 0 }">
+		<s:HGroup gap="2" right="0" horizontalCenter="0" verticalCenter="0" verticalAlign="middle" paddingTop="5">
+			<s:ButtonBar id="pageList" labelField="index" requireSelection="true"/>
+			<s:HGroup id="pageControl" gap="-1">
+				<s:Button id="addPage" label="+" width="30" cornerRadius="0"/>
+				<s:Button id="removePage" label="-" width="30" cornerRadius="0"/>	
+			</s:HGroup>
+		</s:HGroup>
+	</s:Group>
+	
+	<mx:Spacer height="7"/>
+	
+	<s:Scroller id="planScroller" width="100%" height="100%">
+		<s:VGroup  id="rootPlanContainer"
+				   gap="0"
+				   horizontalAlign="center" 
+				   verticalAlign="middle"
+				   paddingTop="0" 
+				   paddingBottom="10"
+				   paddingLeft="10"
+				   paddingRight="10"
+				   >
+			<s:Group id="planContainer">
+				<s:Rect left="0" right="-1" top="0" bottom="-1" depth="2">
+					<s:stroke>
+						<s:SolidColorStroke color="0" weight="1"/>
+					</s:stroke>
+				</s:Rect>
+				<component:PlanGrid  id="grid" depth="1"/>
+				<s:Group id="layerList" width="100%" height="100%" depth="3"/>
+				<component:SelectionArea id="selectionArea" depth="4"/>
+				<s:Label id="address" bottom="10" left="10" backgroundColor="0xffffff" backgroundAlpha=".5" opaqueBackground="0xffffff" depth="100" visible="false"/>
+			</s:Group>
+		</s:VGroup>
+	</s:Scroller>
+	
+</s:VGroup>
